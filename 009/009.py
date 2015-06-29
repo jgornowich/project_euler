@@ -1,8 +1,3 @@
-def sum_pythagorean_triplet(triplet):
-    sum_triplet = triplet[0] + triplet[1] + triplet[2]
-    return sum_triplet
-
-
 def create_pythagorean_triplet(m, n):
     """
     Given two values m < n a pythagorean triplet can be created as follows:
