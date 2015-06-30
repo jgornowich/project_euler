@@ -1,3 +1,9 @@
+def find_product(sequence):
+        try:
+            return reduce(lambda x, y: int(x) * int(y), sequence)
+        except IndexError:
+            print 'Something wrong with the indeces'
+
 if __name__ == '__main__':
 
     """
@@ -38,10 +44,6 @@ if __name__ == '__main__':
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48'''
 
-    print grid_string
-
-    LEG_LENGTH = 4
-
     final_max = 0
 
     grid = []
@@ -50,54 +52,29 @@ if __name__ == '__main__':
 
     rows = len(grid_string.splitlines())
     columns = len(grid[0])
-    print 'Grid is ', rows, 'x', columns
 
-    for (i, j) in [(i, j) for i in range(rows) for j in range(columns)]:
+    for (i, j) in [(i, j) for i in range(rows-3) for j in range(columns-3)]:
         prod = []
-        try:
-            print 'Value at (', i, j, ') = ', grid[i][j]
-            print grid[i][j:j+LEG_LENGTH]
-        except IndexError:
-            print 'Something wrong with the indeces'
 
-            # compute horizontal product form this location
-        try:
-            prod.append(reduce(lambda x, y: int(x)*int(y), grid[i][j:j+LEG_LENGTH]))
-            print prod
-        except IndexError:
-            print 'Something wrong with the horizontal indeces'
+        # compute horizontal product form this location
+        prod.append(find_product(grid[i][j:j + 4]))
 
+        if i < rows - 3:
             # compute vertical product form this location
-        try:
-            leg = [grid[i][j], grid[i+1][j], grid[i+2][j], grid[i+3][j]]
-            print leg
-            prod.append(reduce(lambda x, y: int(x) * int(y), leg))
-            print prod
-        except IndexError:
-            print 'Something wrong with the vertical indeces'
+            leg = [grid[i][j], grid[i + 1][j], grid[i + 2][j], grid[i + 3][j]]
+            prod.append((find_product(leg)))
 
             # compute diagonal down right product from this location
-        try:
-            leg = [grid[i][j], grid[i+1][j+1], grid[i+2][j+2], grid[i+3][j+3]]
-            print leg
-            prod.append(reduce(lambda x, y: int(x)*int(y), leg))
-            print prod
-        except IndexError:
-            print 'Something wrong with the diagonal right indeces'
+            leg = [grid[i][j], grid[i + 1][j + 1], grid[i + 2][j + 2], grid[i + 3][j + 3]]
+            prod.append((find_product(leg)))
 
-            # compute diagonal down right product from this location
-        try:
-            leg = [grid[i][j], grid[i+1][j-1], grid[i+2][j-2], grid[i+3][j-3]]
-            print leg
-            prod.append(reduce(lambda x, y: int(x)*int(y), leg))
-            print prod
-        except IndexError:
-            print 'Something wrong with the diagonal left indeces'
+            if j < columns - 3:
+                # compute diagonal down right product from this location
+                leg = [grid[i][j], grid[i + 1][j - 1], grid[i + 2][j - 2], grid[i + 3][j - 3]]
+                prod.append((find_product(leg)))
 
-         # find the max of the 4 computed and compare against the running maximum
-        print max(prod)
+        # find the max of the 4 computed and compare against the running maximum
         if max(prod) > final_max:
             final_max = max(prod)
-        print final_max
 
     print final_max
